@@ -1,0 +1,9 @@
+# Intellij Idea project structure files
+.idea/
+*.iml
+
+# Build folder
+build/
+
+# Gradle
+.gradle/
