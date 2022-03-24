@@ -1,5 +1,7 @@
 package data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -9,20 +11,23 @@ public final class SkillDbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "ID_COMPETENCE")
-    private int idSkill;
+    @SerializedName("id")
+    private int id;
     @Basic
     @Column(name = "COMPETENCE")
+    @SerializedName("name")
     private String name;
-    @Basic
-    @Column(name = "ID_CATEGORIE")
-    private int idCategory;
 
-    public int getIdSkill() {
-        return idSkill;
+    @ManyToOne
+    @JoinColumn(name="ID_CATEGORIE")
+    private CategoryDbEntity category;
+
+    public int getId() {
+        return id;
     }
 
-    public void setIdSkill(int idCompetence) {
-        this.idSkill = idCompetence;
+    public void setId(int idCompetence) {
+        this.id = idCompetence;
     }
 
     public String getName() {
@@ -33,12 +38,12 @@ public final class SkillDbEntity {
         this.name = competence;
     }
 
-    public int getIdCategory() {
-        return idCategory;
+    public CategoryDbEntity getCategory() {
+        return category;
     }
 
-    public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
+    public void setCategory(CategoryDbEntity category) {
+        this.category = category;
     }
 
     @Override
@@ -46,11 +51,20 @@ public final class SkillDbEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SkillDbEntity that = (SkillDbEntity) o;
-        return idSkill == that.idSkill && idCategory == that.idCategory && Objects.equals(name, that.name);
+        return id == that.id && category == that.category && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idSkill, name, idCategory);
+        return Objects.hash(id, name, category);
+    }
+
+    @Override
+    public String toString() {
+        return "SkillDbEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", idCategory=" + category +
+                '}';
     }
 }

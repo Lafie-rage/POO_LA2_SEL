@@ -12,7 +12,15 @@ public class CategoryTest {
     private final CategoryRepository repository = CategoryRepository.getInstance();
 
     @Test
-    public void testRetrieve() {
+    public void launchCategoryTest() {
+        testRetrieveCategory();
+        testInsertCategory();
+        testUpdateCategory();
+        testRemoveCategory();
+    }
+
+    @Test
+    public void testRetrieveCategory() {
         testRetrieveExistentCategory();
         testRetrieveNonexistentCategory();
     }

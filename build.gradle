@@ -23,6 +23,7 @@ tasks.withType(JavaCompile) {
 dependencies {
     implementation('org.hibernate:hibernate-core:5.6.3.Final')
     implementation('mysql:mysql-connector-java:8.0.27')
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

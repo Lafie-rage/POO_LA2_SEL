@@ -9,7 +9,7 @@ public final class TalentDbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "ID_TALENT")
-    private int idTalent;
+    private int id;
     @Basic
     @Column(name = "ID_MEMBRE")
     private int idMember;
@@ -20,12 +20,12 @@ public final class TalentDbEntity {
     @Column(name = "DetailCompetence")
     private String detailCompetence;
 
-    public int getIdTalent() {
-        return idTalent;
+    public int getId() {
+        return id;
     }
 
-    public void setIdTalent(int idTalent) {
-        this.idTalent = idTalent;
+    public void setId(int idTalent) {
+        this.id = idTalent;
     }
 
     public int getIdMember() {
@@ -57,11 +57,21 @@ public final class TalentDbEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TalentDbEntity that = (TalentDbEntity) o;
-        return idTalent == that.idTalent && idMember == that.idMember && idSkill == that.idSkill && Objects.equals(detailCompetence, that.detailCompetence);
+        return id == that.id && idMember == that.idMember && idSkill == that.idSkill && Objects.equals(detailCompetence, that.detailCompetence);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idTalent, idMember, idSkill, detailCompetence);
+        return Objects.hash(id, idMember, idSkill, detailCompetence);
+    }
+
+    @Override
+    public String toString() {
+        return "TalentDbEntity{" +
+                "id=" + id +
+                ", idMember=" + idMember +
+                ", idSkill=" + idSkill +
+                ", detailCompetence='" + detailCompetence + '\'' +
+                '}';
     }
 }

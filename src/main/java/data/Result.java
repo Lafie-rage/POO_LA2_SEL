@@ -58,7 +58,7 @@ final public class Result<T> {
      */
     @NotNull
     public static <T> Result<T> error(@NotNull Exception exception) {
-        return new Result<>(null, false, exception);
+        return new Result<>(null, true, exception);
     }
 
     /**

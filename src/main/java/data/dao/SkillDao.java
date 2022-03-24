@@ -4,6 +4,7 @@ import common.Nothing;
 import data.DbUtils;
 import data.Result;
 import data.model.CategoryDbEntity;
+import data.model.SkillDbEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -16,54 +17,55 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 
-public interface CategoryDao {
+public interface SkillDao {
 
     /**
      * Provide a safe thread singleton of the dao.
      *
      * @return The unique instance of the DAO.
      */
-    static CategoryDao getInstance() {
-        return CategoryDaoImpl.INSTANCE;
+    static SkillDao getInstance() {
+        return SkillDaoImpl.INSTANCE;
     }
 
     /**
-     * Try to retrieve a CategoryDbEntity by its identifier.
+     * Try to retrieve a SkillDbEntity by its identifier.
      *
      * @param id The id of the category you are looking for.
-     * @return A Result element depending on the result of the DB query.  If it's a success, result will contain the retrieved member.
-     * @see CategoryDbEntity
+     * @return A Result element depending on the result of the DB query.
+     * @see SkillDbEntity
      * @see Result
      */
-    Result<CategoryDbEntity> getById(int id);
+    Result<SkillDbEntity> getById(int id);
 
-    Result<CategoryDbEntity> getByName(String name);
+    Result<SkillDbEntity> getByName(String name);
 
-    Result<Integer> insert(CategoryDbEntity category);
+    Result<Integer> insert(SkillDbEntity category);
 
-    Result<Nothing> update(CategoryDbEntity category);
+    Result<Nothing> update(SkillDbEntity category);
 
-    Result<Nothing> remove(CategoryDbEntity category);
+    Result<Nothing> remove(SkillDbEntity category);
 
 }
 
-// Pacjage private class
-class CategoryDaoImpl implements CategoryDao {
+// Package private class
+class SkillDaoImpl implements SkillDao {
     private final Session dbSession = DbUtils.getSessionInstance();
-    public final static CategoryDao INSTANCE = new CategoryDaoImpl();
+    public final static SkillDao INSTANCE = new SkillDaoImpl();
 
-    private CategoryDaoImpl() {
+    private SkillDaoImpl() {
     }
 
+
     @Override
-    public Result<CategoryDbEntity> getById(int id) {
+    public Result<SkillDbEntity> getById(int id) {
         Transaction transaction = dbSession.getTransaction();
-        CategoryDbEntity category;
+        SkillDbEntity skill;
 
         try {
             transaction.begin();
 
-            category = dbSession.get(CategoryDbEntity.class, id);
+            skill = dbSession.get(SkillDbEntity.class, id);
 
             transaction.commit();
         } catch (PersistenceException e) {
@@ -74,19 +76,20 @@ class CategoryDaoImpl implements CategoryDao {
             }
         }
 
-        if (category == null) {
+        if (skill == null) {
             return Result.empty();
         }
-        return Result.success(category);
+        return Result.success(skill);
     }
 
     @Override
-    public Result<CategoryDbEntity> getByName(String name) {
+    public Result<SkillDbEntity> getByName(String name) {
         Transaction transaction = dbSession.getTransaction();
+        SkillDbEntity skill = null;
 
         CriteriaBuilder builder = dbSession.getCriteriaBuilder();
-        CriteriaQuery<CategoryDbEntity> criteriaQuery = builder.createQuery(CategoryDbEntity.class);
-        Root<CategoryDbEntity> root = criteriaQuery.from(CategoryDbEntity.class);
+        CriteriaQuery<SkillDbEntity> criteriaQuery = builder.createQuery(SkillDbEntity.class);
+        Root<SkillDbEntity> root = criteriaQuery.from(SkillDbEntity.class);
 
         Predicate filteringByNameEquality = builder.equal(root.get("name"), name);
 
@@ -101,7 +104,7 @@ class CategoryDaoImpl implements CategoryDao {
 
             transaction.commit();
 
-            if (result instanceof CategoryDbEntity)return Result.success((CategoryDbEntity) result);
+            if (result instanceof SkillDbEntity) skill = (SkillDbEntity) result;
         } catch (NoResultException e) {
             return Result.empty();
         } catch (PersistenceException e) {
@@ -112,14 +115,13 @@ class CategoryDaoImpl implements CategoryDao {
             }
         }
 
-        return Result.empty();
+        return Result.success(skill);
     }
 
     @Override
-    public Result<Integer> insert(CategoryDbEntity category) {
+    public Result<Integer> insert(SkillDbEntity category) {
         Transaction transaction = dbSession.getTransaction();
         Serializable generatedIdentifier;
-
         try {
             transaction.begin();
 
@@ -130,7 +132,7 @@ class CategoryDaoImpl implements CategoryDao {
             if (generatedIdentifier instanceof Integer) {
                 return Result.success((Integer) generatedIdentifier);
             } else {
-                return Result.empty();
+                return Result.success(-1);
             }
         } catch (PersistenceException e) {
             return Result.error(e);
@@ -142,7 +144,7 @@ class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Result<Nothing> update(CategoryDbEntity category) {
+    public Result<Nothing> update(SkillDbEntity category) {
         Transaction transaction = dbSession.getTransaction();
         try {
             transaction.begin();
@@ -162,7 +164,7 @@ class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Result<Nothing> remove(CategoryDbEntity category) {
+    public Result<Nothing> remove(SkillDbEntity category) {
         Transaction transaction = dbSession.getTransaction();
         try {
             transaction.begin();

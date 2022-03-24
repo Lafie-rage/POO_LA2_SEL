@@ -1,5 +1,7 @@
 package data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -10,9 +12,11 @@ public final class CategoryDbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "ID_CATEGORIE")
+    @SerializedName("id")
     private int id;
     @Basic
     @Column(name = "CATEGORIE")
+    @SerializedName("name")
     private String name;
 
     public int getId() {

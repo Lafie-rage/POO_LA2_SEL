@@ -49,11 +49,11 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override
     public Result<CategoryDbEntity> insert(CategoryDbEntity category) {
-        Result<CategoryDbEntity> searchCategoryBeforeInsertResult = dao.getByName(category.getName());
+        Result<CategoryDbEntity> searchCategoryBeforeInsertResult = getByName(category.getName());
         if (searchCategoryBeforeInsertResult.isEmpty()) {
             Result<Integer> insertResult = dao.insert(category);
             if (insertResult.isSuccess()) {
-                return dao.getById(insertResult.getValue());
+                return getById(insertResult.getValue());
             } else {
                 if (insertResult.isEmpty()) {
                     return Result.empty();
@@ -73,8 +73,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
         if (updateResult.isSuccess()) {
             // Return the updated element if it exists
             return dao.getById(category.getId());
-        } else if (updateResult.isEmpty()) {
-            // Return an empty result if it has done nothing
+        }
+        if (updateResult.isEmpty()) {
+            // Return an empty result if nothing has changed
             return Result.empty();
         }
         return Result.error(updateResult.getException());
@@ -88,7 +89,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
             // Removing it if it exists
             // Keeping business logic to the remove by entity function
             return remove(searchResult.getValue());
-        } else if (searchResult.isEmpty()) {
+        }
+        if (searchResult.isEmpty()) {
             return Result.empty();
         }
         return Result.error(searchResult.getException());
@@ -101,7 +103,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
         if (searchResult.isSuccess()) {
             // Removing it if it exists
             return dao.remove(category);
-        } else if (searchResult.isEmpty()) {
+        }
+        if (searchResult.isEmpty()) {
             return Result.empty();
         }
         return Result.error(searchResult.getException());
